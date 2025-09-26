@@ -129,7 +129,7 @@ class GestionResultado(Base):
 class DashboardSnapshot(Base):
     __tablename__ = "dashboard_snapshots"
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(100))
     filters = Column(Text)  # JSON string
     metrics = Column(Text)  # JSON string

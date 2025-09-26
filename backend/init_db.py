@@ -9,68 +9,75 @@ def init_database():
     with engine.connect() as connection:
         # Tipos de usuario básicos
         connection.execute(text("""
-            INSERT OR IGNORE INTO users_tipos (id, nombre, descripcion) VALUES
+            INSERT INTO users_tipos (id, nombre, descripcion) VALUES
             (1, 'Operador', 'Agente telefónico que realiza gestiones'),
             (2, 'Supervisor', 'Supervisa el trabajo de los operadores'),
             (3, 'Administrador', 'Acceso completo al sistema')
+            ON CONFLICT (id) DO NOTHING
         """))
 
         # Estados de usuario
         connection.execute(text("""
-            INSERT OR IGNORE INTO users_estados (id, nombre) VALUES
+            INSERT INTO users_estados (id, nombre) VALUES
             (1, 'Activo'),
             (2, 'Inactivo'),
             (3, 'Suspendido')
+            ON CONFLICT (id) DO NOTHING
         """))
 
         # Grupos de usuarios
         connection.execute(text("""
-            INSERT OR IGNORE INTO users_grupos (id, nombre, descripcion) VALUES
+            INSERT INTO users_grupos (id, nombre, descripcion) VALUES
             (1, 'Ventas', 'Equipo de ventas telefónicas'),
             (2, 'Retención', 'Equipo de retención de clientes'),
             (3, 'Cobranzas', 'Equipo de gestión de cobranzas')
+            ON CONFLICT (id) DO NOTHING
         """))
 
         # Categorías de usuarios
         connection.execute(text("""
-            INSERT OR IGNORE INTO users_categorias (id, categoria) VALUES
+            INSERT INTO users_categorias (id, categoria) VALUES
             (1, 'Junior'),
             (2, 'Senior'),
             (3, 'Team Leader')
+            ON CONFLICT (id) DO NOTHING
         """))
 
         # Estados de contactos
         connection.execute(text("""
-            INSERT OR IGNORE INTO contactos_estado (id, nombre) VALUES
+            INSERT INTO contactos_estado (id, nombre) VALUES
             (1, 'Prospecto'),
             (2, 'Cliente'),
             (3, 'Rechazado'),
             (4, 'No contactar'),
             (5, 'Seguimiento')
+            ON CONFLICT (id) DO NOTHING
         """))
 
         # Estados de campañas
         connection.execute(text("""
-            INSERT OR IGNORE INTO campaigns_estados (id, nombre, descripcion) VALUES
+            INSERT INTO campaigns_estados (id, nombre, descripcion) VALUES
             (1, 'Activa', 'Campaña en ejecución'),
             (2, 'Pausada', 'Campaña temporalmente suspendida'),
             (3, 'Finalizada', 'Campaña completada'),
             (4, 'Planificada', 'Campaña programada para el futuro')
+            ON CONFLICT (id) DO NOTHING
         """))
 
         # Tipos de gestión
         connection.execute(text("""
-            INSERT OR IGNORE INTO gestiones_tipo (id, nombre) VALUES
+            INSERT INTO gestiones_tipo (id, nombre) VALUES
             (1, 'Llamada'),
             (2, 'Email'),
             (3, 'SMS'),
             (4, 'Visita'),
             (5, 'WhatsApp')
+            ON CONFLICT (id) DO NOTHING
         """))
 
         # Resultados de gestión
         connection.execute(text("""
-            INSERT OR IGNORE INTO gestiones_resultado (id, nombre) VALUES
+            INSERT INTO gestiones_resultado (id, nombre) VALUES
             (1, 'Coordinado'),
             (2, 'Contactado'),
             (3, 'No contesta'),
@@ -87,41 +94,45 @@ def init_database():
             (14, 'Ya tiene el servicio'),
             (15, 'Coordinar por mail'),
             (16, 'Encuesta completada')
+            ON CONFLICT (id) DO NOTHING
         """))
 
         # Usuarios de ejemplo
         connection.execute(text("""
-            INSERT OR IGNORE INTO users (id, id_tipo, id_estado, id_grupo, id_categoria, ci, nombre, apellido, usuario, password, id_tipo_escala) VALUES
+            INSERT INTO users (id, id_tipo, id_estado, id_grupo, id_categoria, ci, nombre, apellido, usuario, password, id_tipo_escala) VALUES
             (1, 1, 1, 1, 1, 12345678, 'Juan', 'Pérez', 'jperez', 'hash123', 1),
             (2, 1, 1, 1, 1, 23456789, 'María', 'González', 'mgonzalez', 'hash456', 1),
             (3, 1, 1, 1, 2, 34567890, 'Carlos', 'Rodríguez', 'crodriguez', 'hash789', 1),
             (4, 2, 1, 1, 3, 45678901, 'Ana', 'Martínez', 'amartinez', 'hashabc', 2),
             (5, 1, 1, 2, 2, 56789012, 'Pedro', 'López', 'plopez', 'hashdef', 1)
+            ON CONFLICT (id) DO NOTHING
         """))
 
         # Campañas de ejemplo
         connection.execute(text("""
-            INSERT OR IGNORE INTO campaigns (id, id_estado, codigo, nombre, descripcion, brokers, fc_inicio, fc_final) VALUES
+            INSERT INTO campaigns (id, id_estado, codigo, nombre, descripcion, brokers, fc_inicio, fc_final) VALUES
             (1, 1, 'VENTA2025', 'Campaña Ventas Q1 2025', 'Campaña de ventas primer trimestre', '_1__2__3_', 20250101, 20250331),
             (2, 1, 'RETEN2025', 'Retención Clientes', 'Campaña de retención de clientes existentes', '_2__4__5_', 20250101, 20250630),
             (3, 1, 'CROSS2025', 'Cross Selling', 'Venta cruzada de productos adicionales', '_1__3__5_', 20250201, 20250430),
             (4, 2, 'COBRA2025', 'Cobranzas', 'Gestión de cobranzas morosas', '_4__5_', 20250101, 20251231),
             (5, 1, 'ENCUES25', 'Encuestas Satisfacción', 'Encuestas de satisfacción post-venta', '_1__2__3__4_', 20250115, 20250315)
+            ON CONFLICT (id) DO NOTHING
         """))
 
         # Teléfonos de ejemplo
         connection.execute(text("""
-            INSERT OR IGNORE INTO telefonos (id, tipo, numero) VALUES
+            INSERT INTO telefonos (id, tipo, numero) VALUES
             (1, 1, 24001234), (2, 2, 98765432), (3, 1, 24005678), (4, 2, 99123456),
             (5, 1, 24009012), (6, 2, 97456789), (7, 1, 24003456), (8, 2, 96789012),
             (9, 1, 24007890), (10, 2, 95123456), (11, 2, 94567890), (12, 2, 93456789),
             (13, 1, 24002345), (14, 1, 24006789), (15, 2, 92345678), (16, 2, 91234567),
             (17, 1, 24004567), (18, 1, 24008901), (19, 2, 90123456), (20, 2, 98901234)
+            ON CONFLICT (id) DO NOTHING
         """))
 
         # Contactos de ejemplo
         connection.execute(text("""
-            INSERT OR IGNORE INTO contactos (id, id_estado, id_domicilio, id_ocupacion, id_estado_civil, ci, nombre1, nombre2, apellido1, apellido2, fc_nacimiento, sexo, zurdo, id_tel_fijo1, id_tel_fijo2, id_tel_movil1, id_tel_movil2, email, id_userinsert, id_fuente_dato, se_queda, timestamp, mascota) VALUES
+            INSERT INTO contactos (id, id_estado, id_domicilio, id_ocupacion, id_estado_civil, ci, nombre1, nombre2, apellido1, apellido2, fc_nacimiento, sexo, zurdo, id_tel_fijo1, id_tel_fijo2, id_tel_movil1, id_tel_movil2, email, id_userinsert, id_fuente_dato, se_queda, timestamp, mascota) VALUES
             (1, 1, 1, 1, 1, 11111111, 'Roberto', 'Carlos', 'Silva', 'Mendoza', 19850315, 'M', 'N', 1, 13, 2, 11, 'roberto.silva@email.com', 1, 1, 0, 20250101120000, 1),
             (2, 2, 2, 2, 2, 22222222, 'Laura', 'Isabel', 'Fernández', 'Castro', 19920708, 'F', 'N', 3, 14, 4, 12, 'laura.fernandez@email.com', 2, 1, 1, 20250102130000, 0),
             (3, 1, 3, 3, 1, 33333333, 'Miguel', 'Ángel', 'Torres', 'Vega', 19880422, 'M', 'S', 5, 17, 6, 15, 'miguel.torres@email.com', 1, 2, 0, 20250103140000, 1),
@@ -132,11 +143,12 @@ def init_database():
             (8, 1, 8, 1, 4, 88888888, 'Beatriz', 'Alejandra', 'Guerrero', 'Peña', 19940210, 'F', 'N', 7, 9, 8, 10, 'beatriz.guerrero@email.com', 5, 1, 0, 20250108190000, 0),
             (9, 1, 9, 3, 1, 99999999, 'Jorge', 'Luis', 'Mendoza', 'Flores', 19870530, 'M', 'N', 13, 17, 11, 15, 'jorge.mendoza@email.com', 3, 2, 0, 20250109200000, 1),
             (10, 5, 10, 2, 2, 10101010, 'Valentina', 'Sofía', 'Ortega', 'Restrepo', 19910914, 'F', 'N', 14, 18, 12, 16, 'valentina.ortega@email.com', 2, 1, 1, 20250110210000, 0)
+            ON CONFLICT (id) DO NOTHING
         """))
 
         # Gestiones de ejemplo (muestra representativa)
         connection.execute(text("""
-            INSERT OR IGNORE INTO gestiones (id, id_tipo, id_campaign, id_broker, id_contacto, id_resultado, notas, timestamp, id_tel_fijo1) VALUES
+            INSERT INTO gestiones (id, id_tipo, id_campaign, id_broker, id_contacto, id_resultado, notas, timestamp, id_tel_fijo1) VALUES
             (1, 1, 1, 1, 1, 3, 'Primera llamada, no contesta', '20250115080000', 1),
             (2, 1, 1, 1, 1, 2, 'Contactado, muestra interés', '20250116090000', 1),
             (3, 1, 1, 1, 1, 1, 'Coordinada visita para el jueves', '20250117100000', 1),
@@ -178,6 +190,7 @@ def init_database():
             (39, 1, 5, 5, 10, 16, 'Encuesta completada, muy satisfecha', '20250115150000', 14),
             (40, 1, 2, 5, 10, 2, 'Consulta sobre nuevos servicios', '20250116160000', 12),
             (41, 1, 2, 1, 10, 1, 'Contrata servicio adicional', '20250117170000', 12)
+            ON CONFLICT (id) DO NOTHING
         """))
 
         connection.commit()
