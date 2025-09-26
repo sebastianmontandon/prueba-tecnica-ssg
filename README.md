@@ -6,7 +6,7 @@ Dashboard para visualización de métricas de CRM con capacidad de filtrado y sn
 
 - **Backend**: FastAPI + SQLAlchemy + SQLite/PostgreSQL
 - **Frontend**: Next.js 14 + TypeScript + Tailwind CSS
-- **Base de datos**: SQLite (desarrollo) / PostgreSQL (producción)
+- **Base de datos**: SQLite (desarrollo, para poder visualizar los datos de la bd utilice esta app https://sqlitebrowser.org/dl/) / PostgreSQL (producción)
 
 ## Métricas Implementadas
 
