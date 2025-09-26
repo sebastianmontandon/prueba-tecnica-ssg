@@ -4,9 +4,9 @@ Dashboard para visualización de métricas de CRM con capacidad de filtrado y sn
 
 ## Arquitectura
 
-- **Backend**: FastAPI + SQLAlchemy + SQLite
-- **Frontend**: Next.js + Tailwind CSS
-- **Base de datos**: SQLite (archivo local)
+- **Backend**: FastAPI + SQLAlchemy + SQLite/PostgreSQL
+- **Frontend**: Next.js 14 + TypeScript + Tailwind CSS
+- **Base de datos**: SQLite (desarrollo) / PostgreSQL (producción)
 
 ## Métricas Implementadas
 
@@ -30,6 +30,7 @@ Dashboard para visualización de métricas de CRM con capacidad de filtrado y sn
 ### Prerrequisitos
 - Python 3.8+ instalado
 - Node.js 18+ instalado
+- PostgreSQL (opcional, para producción)
 
 ### 1. Configurar Backend
 ```bash
@@ -48,6 +49,9 @@ source venv/bin/activate
 
 # Instalar dependencias
 pip install -r requirements.txt
+
+# Inicializar base de datos (primera vez)
+python init_db.py
 ```
 
 ### 2. Configurar Frontend
@@ -64,7 +68,9 @@ cd backend
 # Windows: venv\Scripts\activate
 # Linux/Mac: source venv/bin/activate
 
+# Ejecutar servidor
 uvicorn main:app --reload
+
 ```
 El backend estará en http://localhost:8000
 
@@ -73,10 +79,22 @@ El backend estará en http://localhost:8000
 cd frontend
 npm run dev
 ```
-El frontend estará en http://localhost:3000
+El frontend estará en http://localhost:3000 (o 3001/3002 si el puerto está ocupado)
 
-### 5. Acceder al dashboard
-- Dashboard: http://localhost:3000
+### 5. Configuración de Base de Datos (Opcional)
+
+Para usar PostgreSQL en lugar de SQLite:
+
+```bash
+# Copiar archivo de configuración
+cp backend/.env.example backend/.env
+
+# Editar backend/.env con tus credenciales de PostgreSQL
+DATABASE_URL=postgresql://usuario:contraseña@localhost:5432/crm_dashboard
+```
+
+### 6. Acceder al dashboard
+- Dashboard: http://localhost:3000 (o puerto disponible)
 - API Documentation: http://localhost:8000/docs
 
 ## Endpoints API
@@ -93,21 +111,33 @@ El frontend estará en http://localhost:3000
 1. **Visualización de KPIs**: Cards con métricas principales
 2. **Filtros dinámicos**: Fecha, campaña y agente
 3. **Snapshots**: Guardar estado actual de métricas con filtros aplicados
-4. **Historial**: Visualización de snapshots guardados
+4. **Historial**: Visualización de snapshots guardados en grid responsivo
 
 ## Base de Datos
 
+### SQLite (Desarrollo)
 La base de datos SQLite se inicializa automáticamente con:
 - Estructura de tablas del CRM
 - Tabla dashboard_snapshots para almacenar snapshots
 - Datos de ejemplo para testing
 - Archivo: `backend/crm_dashboard.db`
 
+### PostgreSQL (Producción)
+Compatible con PostgreSQL mediante configuración en archivo `.env`:
+- Configuración flexible de host, puerto y credenciales
+ACLARACIÓN: Por falta de tiempo no fue posible resolver un issue que se presento con la codificacion UTF de los datos, por eso se opto por implementarlo de forma temporal en SQLite.
+
 ## Consideraciones de Desarrollo
 
-- Base de datos SQLite para simplicidad y portabilidad
-- Timestamps en formato YYYYMMDDhhiiss (char) para compatibilidad
-- Manejo de división por cero en Penetración Neta
-- CORS habilitado para desarrollo local
-- Filtros opcionales y combinables
-- Inicialización automática de datos al arrancar el backend
+- **Base de datos dual**: SQLite para desarrollo, PostgreSQL para producción
+- **Timestamps**: Formato YYYYMMDDhhiiss (char) para compatibilidad
+- **Robustez**: Manejo de división por cero en Penetración Neta
+- **CORS**: Habilitado para desarrollo local
+- **Filtros**: Opcionales y combinables con validación
+- **Inicialización**: Automática de datos y esquema
+- **UI/UX**: Interfaz responsiva con diseño moderno
+
+## Archivos de Configuración
+
+- `backend/.env.example`: Plantilla de configuración de base de datos
+- `backend/init_db.py`: Script de inicialización de base de datos

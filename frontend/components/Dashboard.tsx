@@ -348,7 +348,7 @@ export default function Dashboard() {
             <h2 className="text-xl font-semibold text-gray-800">Guardar Snapshot</h2>
           </div>
           <p className="text-gray-600 mb-4">Guarda el estado actual de las métricas con los filtros aplicados</p>
-          <div className="flex gap-4">
+          <div className="flex flex-col sm:flex-row gap-4">
             <input
               type="text"
               value={snapshotName}
@@ -359,9 +359,10 @@ export default function Dashboard() {
             <button
               onClick={saveSnapshot}
               disabled={!snapshotName.trim()}
-              className="bg-gradient-to-r from-green-600 to-green-700 text-white px-6 py-2 rounded-lg hover:from-green-700 hover:to-green-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg"
+              className="bg-gradient-to-r from-green-600 to-green-700 text-white px-6 py-2 rounded-lg hover:from-green-700 hover:to-green-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg whitespace-nowrap sm:w-auto w-full"
             >
-              Guardar Snapshot
+              <span className="hidden sm:inline">Guardar Snapshot</span>
+              <span className="sm:hidden">Guardar</span>
             </button>
           </div>
         </div>
